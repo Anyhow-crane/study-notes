@@ -6,14 +6,54 @@ docker仓库地址：<https://hub.docker.com/r/sonatype/nexus3/>
 
 ``` sh
 # 1: 下载镜像
-docker pull sonatype/nexus3
-# 2: 创建工作文件夹
+docker pull sonatype/nexus3:3.14.0
+# 2. 创建容器卷（推荐这个模式）
+docker volume create --name nexus-data
+# 3. 运行个容器
+docker run -d -p 8081:8081 -p 8082:8082 -p 8083:8083 --name nexus -v nexus-data:/nexus-data sonatype/nexus3
+# 2. 创建工作文件夹
 mkdir /data/nexus-data && chown -R 200 /data/nexus-data
-# 3: 运行个容器
+# 3. 运行个容器
 docker run -d -p 8081:8081 --name nexus -v /data/nexus-data:/nexus-data sonatype/nexus3
 ```
 
 > 初始账号密码：admin:admin123
+>
+> 推荐使用`3.14.0`，3.15有问题，无法给代理仓库配置用户密码，有些仓库需要用户密码才能下载（也可能在其他地方配置，没找到怎么配置的）
+>
+> 上面运行3个端口映射：8081是默认访问端口，8082配置为docker-hosted的提交端口，8083配置为docker-group的下载端口（这个只能下载不能上传），后面使用时，最好每个端口映射一个域名。
+
+## 仓库信息备份
+
+```
+maven-clojars
+https://repo.clojars.org/
+maven-aliyun
+https://maven.aliyun.com/repository/public/
+maven-central(自带)
+https://repo.maven.apache.org/maven2/ 或者 https://repo1.maven.org/maven2/
+maven-wiseloong-releases username:wiseloong password:wiseloong@2019
+http://mvn.wiseloong.com/repository/maven-releases/
+maven-wiseloong-snapshot
+http://mvn.wiseloong.com/repository/maven-snapshots/
+maven-wiseloong-thirdparty
+http://mvn.wiseloong.com/repository/thirdparty/
+
+docker-hosted 开启http：8082，用于上传
+docker-group 开启http：8083，用于下载
+docker-aliyun
+https://s36hsj1h.mirror.aliyuncs.com/
+
+maven-publish
+```
+
+```sh
+
+docker volume create nexus-data
+docker run -d -p 8110:8081 -p 8090:8082 -p 80:8083 --name nexus -v nexus-data:/nexus-data sonatype/nexus3:3.14.0
+```
+
+>配置中央仓库，或公共仓库比如阿里，把2个验证配置关掉；1.调整`Layout policy`为`Permissive`，2.关闭`Strict Content Type Validation`
 
 ## Nginx反向代理开启https
 
@@ -63,12 +103,28 @@ keytool -import -alias wisdragon -keystore /Library/Java/JavaVirtualMachines/jdk
 
 ### idea 仓库更新index出错
 
-![事实上](../images/nexus-001.png)
+![image-20190328165740791](../images/image-20190328165740791.png)
 
 解决方法：需要创建定时更新index文件任务（admin登陆nexus）
 
-![Pasted Graphic 1.tiff](../images/nexus-002.png)
+![image-20190328165836942](../images/image-20190328165836942.png)
 
-![Pasted Graphic 2.tiff](../images/nexus-003.png)
+![image-20190328165936326](../images/image-20190328165936326.png)
 
-![Pasted Graphic 3.tiff](../images/nexus-004.png)
+![image-20190328170006597](../images/image-20190328170006597.png)
+
+## 开启docker私有仓库
+
+新建一个docker *hosted* ，填写个名字docker
+
+### 开通push
+
+![image-20190307142533463](../images/image-20190307142533463.png)
+
+> 需要配置个端口，通过这个端口实现上传下载
+
+### 公开pull
+
+
+
+![image-20190307142247188](../images/image-20190307142247188.png)

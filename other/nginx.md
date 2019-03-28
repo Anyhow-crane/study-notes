@@ -19,6 +19,9 @@ systemctl enable nginx
 # 5 运行nginx
 systemctl start nginx
 /etc/nginx/conf.d/default.conf
+
+nginx -c /etc/nginx/nginx.conf
+nginx -s reload
 ```
 
 > yum源文件参考[官网](http://nginx.org/en/linux_packages.html#RHEL-CentOS)：baseurl路径中7为centos版本，x86_64为$basearch，可以使用`cat /proc/version`查看

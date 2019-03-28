@@ -53,3 +53,9 @@ docker tag coredns/coredns:1.2.6 k8s.gcr.io/coredns:1.2.6
 
 > kubernetes-1.13.1版本验证匹配的最高docker版本为18.06
 
+
+
+```sh
+kubectl config use-context docker-for-desktop
+```
+
