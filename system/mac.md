@@ -58,6 +58,22 @@ ZSH_THEME="spaceship"
 
 
 
+# svn使用
+
+## 设置全局忽略文件夹或文件
+
+用户目录下打开.subversion/config，添加global-ignores。
+
+```
+global-ignores = target *.iml .DS_Store .idea .svn log *.log .nrepl-port
+```
+
+
+
+
+
+
+
 # 快捷复制文件目录
 
 1. 显示里开启路径栏，右键路径栏上路径，选择拷贝路径。(推荐，省事)
@@ -75,3 +91,29 @@ ZSH_THEME="spaceship"
 ![image-20190228112148593](../images/image-20190228112148593.png)
 
 ![image-20190228112224491](../images/image-20190228112224491.png)
+
+# idea
+
+## 初始化设置
+
+1. Appearance & Behavior -> System Settings 关闭Reopen last project on startup  (每次启动是否打开上一个项目)
+2. Editor -> General -> Auto Import 打开 Add unambiguous imports on the fly  和 Optimmize imports on the fly(...)(打开自动添加依赖)
+3. Editor -> General -> Code Completion 关闭 Match case: ... (关闭后，在输代码时忽略大小写来提示)
+4. Editor -> General -> Editor Tabs 下拉 Placement:  选择None （关闭tabs，使用command+E 打开最近使用的文件）
+5. Editor -> Code Style 下拉 Line separator: 选择 Unix and macOS (\n) (换行符使用unix的\n，实现与服务器统一)
+6. Editor -> File Encodings 全部修改为 UTF-8 并勾选上 Transparent native-to-ascii conversion
+7. Editor -> File Types  在 Ignore files and folders 里添加 .idea;*.iml; (项目里不显示文件)
+
+## 常用插件
+
+1. Cursive：clojure开发插件
+2. Lombok Plugin
+3. Rainbow Brackets：多彩括号
+4. String Manipulation：字符串处理
+5. IDE Features Trainer：idea使用介绍
+6. LiveEdit：自动更新页面显示
+7. NodeJS：
+
+## 使用系统默认软件打开文件
+
+比如我想使用系统安装的Typora打开.md文件，先在Editor -> File Types找到Markdown 删除*.md，再右键.md文件，选择Associate with File Type，再勾选Open matching files in associated application。

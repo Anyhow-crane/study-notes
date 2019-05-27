@@ -60,6 +60,7 @@ services:
     ports:
       - "3000:3000"
     environment:
+      TZ: Asia/Shanghai
       POOL_SPEC__JDBC_URL: jdbc:mysql://192.168.16.17:3306/hrms?useSSL=false&serverTimezone=PRC
     volumes:
       - /data/wise/hrms/logs/service:/app/log
@@ -114,5 +115,18 @@ services:
     volumes:
       - /data/wise/hrms/logs/web:/app/log
 
+```
+
+```sh
+# 1 docker安装命令，3306 8888分别为需要开放防火墙的端口号。
+curl -fsSL https://github.com/Anyhow-crane/docker-ops/blob/master/wise-init-docker.sh?raw=true | bash -s 3000 3306 8888
+
+curl -fsSL https://github.com/Anyhow-crane/docker-ops/blob/master/wise-init-docker.sh?raw=true | bash -s -- -u /home 3000 3306 8888
+```
+
+``` dockerfile
+FROM openjdk:8-jre-alpine
+MAINTAINER feilong.li@wisdragon.com
+ENV TZ Asia/Shanghai
 ```
 

@@ -70,14 +70,14 @@ usermod -aG wheel wise
 ## 开放端口
 
 ```sh
-    sudo firewall-cmd --zone=public --add-port=80/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=80/tcp --permanent
 sudo firewall-cmd --reload
 ```
 
 ## 压缩和解压
 
 ``` sh
-tar -zcf xx.tar.gz /xx	#压缩（通过gzip指令处理备份文件）（真的压缩）
+tar -zcf xx.tar.gz ./xx	#压缩（通过gzip指令处理备份文件）（真的压缩）
 tar -zxf xx.tar.gz		#解压（通过gzip指令处理备份文件）
 ```
 
@@ -122,6 +122,9 @@ EOF'
 poweroff
 # 重启
 reboot
+# 查看系统版本信息
+cat /etc/os-release
+rpm -q centos-release
 ```
 
 
@@ -192,5 +195,14 @@ wise_add_dns() {
 			EOF"
 	fi
 }
+```
+
+## ssh 免密登陆
+
+``` sh
+# 生成公钥私钥，直接回车（默认目录文件），回车（不创建密码），回车
+ssh-keygen
+# 复制公钥到远程服务器的用户下
+ssh-copy-id root@10.211.55.9
 ```
 

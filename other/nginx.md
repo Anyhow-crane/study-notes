@@ -22,6 +22,8 @@ systemctl start nginx
 
 nginx -c /etc/nginx/nginx.conf
 nginx -s reload
+
+sudo systemctl disable nginx
 ```
 
 > yum源文件参考[官网](http://nginx.org/en/linux_packages.html#RHEL-CentOS)：baseurl路径中7为centos版本，x86_64为$basearch，可以使用`cat /proc/version`查看

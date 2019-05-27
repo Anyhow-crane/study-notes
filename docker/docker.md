@@ -121,6 +121,7 @@ cat <<EOF > /etc/docker/daemon.json
   "data-root": "/data/docker",
   "selinux-enabled": false,
   "registry-mirrors": ["https://pfs.wiseloong.com"]
+  "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"] # 中科大
 }
 EOF
 ```
@@ -144,10 +145,15 @@ docker rm -v 容器
 docker commit -p -a "feilong.li@wisdragon.com" -m "说明" 容器 新镜像名
 ```
 
+```dockerfile
+ENV TZ Asia/Shanghai
+```
+
 
 
 ```sh
 docker run -dit --name alpine1 --network alpine-net alpine ash
+docker run -dit --name alpine alpine sh
 ```
 
 
@@ -384,4 +390,54 @@ docker run -d --name gitlab-runner --restart always \
     --volumes-from gitlab-runner-config \
     gitlab/gitlab-runner:latest
 ```
+
+# docker-machine
+
+## 安装
+
+``` sh
+curl -L https://github.com/docker/machine/releases/download/v0.16.0/docker-machine-$(uname -s)-$(uname -m) >/usr/local/bin/docker-machine && 
+  chmod +x /usr/local/bin/docker-machine
+```
+
+> mac win 安装docker后自带docker-machine。
+
+## 给远程服务器安装docker
+
+1. 开启免密登陆
+
+```sh
+# 生成秘钥对，一直点回车，（一次就好）
+ssh-keygen
+# 将公钥传输给远程服务器，需要输入它的root密码
+ssh-copy-id root@192.168.1.1
+```
+
+2. 开放2376端口
+
+安装时使用--generic-engine-port参数默认为2376，如果不开放这个端口，安装后主机没法接收信息，会提示错误，实际上已经安装成功，只是主机无法监控。
+
+```sh
+# 登陆远程服务器
+ssh root@192.168.1.1
+firewall-cmd --zone=public --add-port=2376/tcp --permanent
+firewall-cmd --reload
+exit
+```
+
+3. 安装docker
+
+``` sh
+# 普通安装
+docker-machine create -d generic --generic-ip-address=192.168.1.1 centos-1
+# 使用配置参数
+docker-machine create -d generic \
+  --engine-opt data-root=/data/docker \
+  --engine-opt selinux-enabled=false \
+  --engine-registry-mirror https://pfs.wiseloong.com \
+  --engine-insecure-registry registry.myco.com \
+  centos-1
+```
+
+> Boot2Docker 有待研究
 

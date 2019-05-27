@@ -50,7 +50,7 @@ maven-publish
 ```sh
 
 docker volume create nexus-data
-docker run -d -p 8110:8081 -p 8090:8082 -p 80:8083 --name nexus -v nexus-data:/nexus-data sonatype/nexus3:3.14.0
+docker run -d -p 8110:8081 -p 8090:8082 -p 80:8083 --name nexus3 -v nexus-data:/nexus-data --restart=always sonatype/nexus3:3.14.0
 ```
 
 >配置中央仓库，或公共仓库比如阿里，把2个验证配置关掉；1.调整`Layout policy`为`Permissive`，2.关闭`Strict Content Type Validation`
@@ -69,11 +69,11 @@ server {
     ssl_certificate /nginx/cert/wisdragon.com.bundle.crt;
     ssl_certificate_key /nginx/cert/cert.key.pem;
     location / {
+        proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header X-Forwarded-Port $server_port;
         proxy_pass http://192.168.19.25:8081;
     }
 }

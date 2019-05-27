@@ -142,7 +142,7 @@ gpg -d ~/.lein/credentials.clj.gpg
 ;; ~/.lein/credentials.clj
 {
     #"clojars" {:username "username" :password "password"}
-    #"https://dc.wisdragon.com/.*" {:username "username" :password "password"}
+    #"https://dc.wiseloong.com/.*" {:username "username" :password "password"}
 }
 ```
 
