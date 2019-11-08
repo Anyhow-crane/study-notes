@@ -1,5 +1,45 @@
 # mysql日常使用记录
 
+## 创建用户和数据库
+
+```sql
+-- 多步创建
+CREATE DATABASE hrms;
+create user hrms@'%' identified by 'hrms';
+grant all on hrms.* to hrms@'%';
+-- 一步创建，好像8.0版本不支持
+CREATE DATABASE hrms_cz;
+grant all on hrms_cz.* to 'hrms.cz'@'%' identified by 'hrms.cz';
+```
+
+## 授予创建方法的权限（上面已经包含）
+
+```sql
+grant create routine on hrms_cz.* to 'hrms.cz'@'%';
+```
+
+## 创建方法
+
+方法一般需要root账户才能创建，==注意，创建时要指定这个方法的使用用户，不是放到这个数据库，这个数据库的人就可以使用的。==
+
+```sql
+DROP FUNCTION IF EXISTS `dict_val`;
+delimiter ;;
+CREATE DEFINER=`hrms`@`%` FUNCTION `dict_val`(dict_id INT) RETURNS varchar(255) CHARSET utf8mb4
+BEGIN
+    DECLARE ret VARCHAR(255) DEFAULT NULL;
+    IF dict_id IS NOT NULL THEN
+        SELECT name INTO ret
+        FROM mm_dictvalue WHERE is_valid = 1 and id = dict_id;
+        END IF;
+    RETURN ret;
+END
+;;
+delimiter ;
+```
+
+> 上面为创建查询字典值的语句，注意：CREATE DEFINER=`hrms`@`%`，表示指定给hrms用户使用的，如果不加上这个，会包没有权限的错误1227。
+
 ##连接池查看语句
 
 ```sql
@@ -23,7 +63,7 @@ and ifnull(o.is_sys_var, 0) <> 1
 
 ## docker下的mysql5.7的修改配置文件
 
-``` sh
+```sh
 # 进入mysql容器
 docker exec -it mysql /bin/bash
 # 给配置文件追加配置内容
@@ -45,7 +85,7 @@ docker restart mysql
 
 1. 当不能擅自重启MySQL服务时，可通过sql语句修改作用范围：
 
-``` sql
+```sql
 -- 查看最大值
 show variables like "group_concat_max_len";
 -- 修改全局设置（需要root权限，mysql重启失效，需要在配置文件修改）
@@ -72,11 +112,9 @@ docker run --name mysql-backup -v hrms_mysql:/data alpine tar -zcf /backup.tar.g
 docker commit -a "feilong.li@wisdragon.com" -m "mysql备份数据" mysql-backup sso.wiseloong.com/wise/mysql-backup:1.0-init
 ```
 
+## 批量复制更新表字段
 
-
-##  批量复制更新表字段
-
-``` sql
+```sql
 -- 复制另一个表的字段
 UPDATE ce_person_staff ps, cm_person p 
 SET ps.dingding_id = p.code
@@ -88,11 +126,7 @@ SET dingding_id = id
 WHERE dingding_id is null;
 ```
 
-
-
-
-
-``` sql
+```sql
 select j.id, j.code, j.name,j.org_id, o.name as org_id, dict_val(j.job_type_id) as job_type_id
 from cm_job j
 left join cm_org o on o.id = j.org_id and o.is_valid = 1
@@ -101,33 +135,29 @@ and j.spec_id = 1007
 and find_in_set(j.org_id, CONCAT_WS(',', org_children(1002), org_children(1005)))
 ```
 
-
-
-``` sql
+```sql
 SELECT p.id, p.CODE, p.NAME, job.NAME AS job_name 
 FROM cm_person p
 LEFT JOIN (
-	SELECT r.person_id, r.NAME 
-	FROM (
-		SELECT a.person_id, a.NAME, @rownum := @rownum + 1,
-		IF (@pdept = a.person_id, @rank := @rank + 1, @rank := 1 ) AS rank, @pdept := a.person_id 
-		FROM (
-			SELECT j.id AS job_id, j.NAME, pj.person_id 
-			FROM cm_job j, cr_person_job pj 
-			WHERE j.id = pj.job_id AND j.spec_id = 1007 
-			ORDER BY pj.person_id ASC, pj.start_date DESC 
-			) a,
-			(SELECT @rownum := 0, @pdept := NULL,@rank := 0 ) b 
-		) r 
-	WHERE r.rank = 1 
-	) job ON p.id = job.person_id 
+    SELECT r.person_id, r.NAME 
+    FROM (
+        SELECT a.person_id, a.NAME, @rownum := @rownum + 1,
+        IF (@pdept = a.person_id, @rank := @rank + 1, @rank := 1 ) AS rank, @pdept := a.person_id 
+        FROM (
+            SELECT j.id AS job_id, j.NAME, pj.person_id 
+            FROM cm_job j, cr_person_job pj 
+            WHERE j.id = pj.job_id AND j.spec_id = 1007 
+            ORDER BY pj.person_id ASC, pj.start_date DESC 
+            ) a,
+            (SELECT @rownum := 0, @pdept := NULL,@rank := 0 ) b 
+        ) r 
+    WHERE r.rank = 1 
+    ) job ON p.id = job.person_id 
 WHERE p.is_valid = 1 
-	AND p.id = 1009
+    AND p.id = 1009
 ```
 
-
-
-``` sql
+```sql
 INSERT INTO cm_org_history (org_id,code,name,creator_id,create_date,modifier_id,modify_date,is_valid,notes,version,tenant_id,spec_id,short_name,type,unique_id,magor_id,level,parent_id,is_own_lower,update_type_id,all_name)
 SELECT id,code,name,creator_id,create_date,modifier_id,modify_date,is_valid,notes,version,tenant_id,spec_id,short_name,type,unique_id,magor_id,level,parent_id,is_own_lower,2248,all_name from cm_org where is_valid = 1
 ```
@@ -160,3 +190,4 @@ show global variables like "innodb_large_prefix";
 innodb_large_prefix=ON
 ```
 
+![image-20190531145823656](../images/image-20190531145823656.png)

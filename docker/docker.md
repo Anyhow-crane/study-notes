@@ -4,7 +4,7 @@
 
 ### 使用官方安装脚本自动安装
 
-``` sh
+```sh
 curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
 # 或者下载下来运行
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -12,14 +12,14 @@ sudo sh get-docker.sh --mirror Aliyun
 ```
 
 > 有时会提示如下错误：正在尝试其它镜像。。。。然后下载不了，失败后直接使用`sudo yum -y install docker-ce`再尝试安装。所以最好用下面的方法。
->
+> 
 > 使用docker时不要登陆官方账号，登陆官方账号后默认从官方仓库地址获取镜像，不从配置的地址获取镜像了。
 
 ### 手动安装帮助
 
 #### Ubuntu 14.04 16.04
 
-``` sh
+```sh
 # step 1: 安装必要的一些系统工具
 sudo apt-get update
 sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
@@ -42,7 +42,7 @@ sudo apt-get -y install docker-ce
 
 #### CentOS 7
 
-``` sh
+```sh
 # step 1: 安装必要的一些系统工具
 sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 # Step 2: 添加软件源信息
@@ -75,7 +75,7 @@ sudo systemctl start docker
 
 ### 安装后操作（centos）
 
-``` sh
+```sh
 # 1:普通用户your-user的授权
 sudo usermod -aG docker your-user
 sudo systemctl restart docker
@@ -93,7 +93,7 @@ sudo yum clean all
 
 ## 删除docker
 
-``` sh
+```sh
 # 1:列出docker包的具体的名字。
 yum list installed | grep docker
 # 2:删除docker。
@@ -112,9 +112,7 @@ sudo yum remove docker \
                 docker-engine
 ```
 
-
-
-``` sh
+```sh
 mkdir /etc/docker
 cat <<EOF > /etc/docker/daemon.json
 {
@@ -126,7 +124,7 @@ cat <<EOF > /etc/docker/daemon.json
 EOF
 ```
 
-``` sh
+```sh
 sudo bash -c 'cat <<EOF > /etc/docker/daemon.json
 {
   "data-root": "/data/docker",
@@ -136,7 +134,7 @@ sudo bash -c 'cat <<EOF > /etc/docker/daemon.json
 EOF'
 ```
 
-``` sh
+```sh
 # --rm表示停止容器则自动删除容器，这个会在删除时一并删除volume，不能与-d同时使用
 docker run --rm 镜像
 # 删除容器时一并删除volume，只能删掉自动创建的volume，不会删掉你手动创建的volume
@@ -149,14 +147,17 @@ docker commit -p -a "feilong.li@wisdragon.com" -m "说明" 容器 新镜像名
 ENV TZ Asia/Shanghai
 ```
 
-
-
 ```sh
 docker run -dit --name alpine1 --network alpine-net alpine ash
 docker run -dit --name alpine alpine sh
 ```
 
+## 宿主内部容器互相访问
 
+比如在一个宿主机上启动2个容器，一个mysql，一个tomcat，tomcat需要访问mysql；配置127.0.0.1:3306或localhost:3306都是错误的，宿主机IP：192.168.11.11:3306这个也是错误的；因为宿主机ip（192.168.11.11）是和我们电脑在一个网络里，我们电脑能访问这个ip，但是容器不在这个网络里，它识别不了这个ip；容器和宿主机在另外一个网络里。
+
+- 172.0.17.1:3306，172.0.17.1这个ip是宿主机在内部网络里的ip。
+- mysql:3306，这种是启动tomcat时使用--link mysql:mysql ，把2个容器关联起来。
 
 # 数据卷-[官网](https://docs.docker.com/storage/volumes/)
 
@@ -202,7 +203,7 @@ docker start mysql2
 ```
 
 > 备份还原时使用`--volumes-from mysql`，跟的是容器名称，不是数据卷名称；
->
+> 
 > 使用`alpine`镜像，小巧，但是没用`bash`命令，所以使用`sh -c`，也可以换成官方使用的`ubuntu`，可以使用`bash -c`。
 
 上面为官方方法改编，不太方便，还原时需要先启动容器，再停止容器，还原时还要清空数据卷，再解压；推荐下面更好的方法，可以在创建完新容器卷2后直接还原，再启动mysql容器2：
@@ -258,7 +259,7 @@ docker run -d --name service --link mysql:mysql-link -p 3000:3000 images
 ```
 
 > 后台服务数据库连接配置可设置为：jdbc:mysql://==mysql-link==:3306/db?useSSL=false&serverTimezone=PRC
->
+> 
 > --link=mysql:mysql-link，前面的mysql为mysql容器名称，mysql-link为别名给service使用，也可以设置成--link=mysql:mysql，对应的配置为mysql:3306
 
 ## network
@@ -317,9 +318,9 @@ services:
 ```
 
 > 后台服务数据库连接配置可设置为：jdbc:mysql://==hrms-db==:3306/db?useSSL=false&serverTimezone=PRC
->
+> 
 > 上面的yml文件为简化版，还故意把services名称和容器名称不同化，表明网络名称为services名称，不是容器名称。也可以单独给后台服务配置links:\n - "hrms-db:hrms-db"，感觉还是networks高大上点。
->
+> 
 > docker-compose默认会创建一个`[projectname]_default`的网络，所以上面的注掉部分为默认创建的。
 
 # Docker Compose
@@ -328,7 +329,7 @@ mac和windows安装完docker都自带Docker Compose。
 
 ## 在线安装-[官网文档](https://docs.docker.com/compose/install/)
 
-``` sh
+```sh
 # 下载文件到目录，修改版本为最新的版本（真的慢,可使用下面）
 sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 # 给可运行权限
@@ -395,7 +396,7 @@ docker run -d --name gitlab-runner --restart always \
 
 ## 安装
 
-``` sh
+```sh
 curl -L https://github.com/docker/machine/releases/download/v0.16.0/docker-machine-$(uname -s)-$(uname -m) >/usr/local/bin/docker-machine && 
   chmod +x /usr/local/bin/docker-machine
 ```
@@ -427,7 +428,7 @@ exit
 
 3. 安装docker
 
-``` sh
+```sh
 # 普通安装
 docker-machine create -d generic --generic-ip-address=192.168.1.1 centos-1
 # 使用配置参数
@@ -440,4 +441,3 @@ docker-machine create -d generic \
 ```
 
 > Boot2Docker 有待研究
-

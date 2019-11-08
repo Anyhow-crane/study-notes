@@ -1,5 +1,3 @@
-
-
 # AdoptOpenJDK
 
 https://adoptopenjdk.net
@@ -16,7 +14,7 @@ https://developers.redhat.com/products/openjdk/download
 
 https://www.azul.com/downloads/zulu/
 
-# Amazon Corretto 
+# Amazon Corretto
 
 https://aws.amazon.com/cn/corretto/
 

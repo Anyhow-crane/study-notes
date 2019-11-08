@@ -2,7 +2,7 @@
 
 ## 安装 （使用阿里源，[参考](https://opsx.alibaba.com/mirror)）
 
-``` sh
+```sh
 # root用户
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -22,7 +22,7 @@ systemctl enable kubelet && systemctl start kubelet
 
 安装后操作（centos）
 
-``` sh
+```sh
 # 1:关闭系统的Swap
 swapoff -a
 # 2:开放Kubernetes各个组件所需要的端口（修改后需要重启docker）
@@ -53,9 +53,6 @@ docker tag coredns/coredns:1.2.6 k8s.gcr.io/coredns:1.2.6
 
 > kubernetes-1.13.1版本验证匹配的最高docker版本为18.06
 
-
-
 ```sh
 kubectl config use-context docker-for-desktop
 ```
-

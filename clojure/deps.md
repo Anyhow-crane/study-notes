@@ -21,7 +21,7 @@
 
 启动命令使用示例
 
-``` sh
+```sh
 java -Dconf="../somepath/app.edn" -jar app.jar
 ```
 
@@ -107,4 +107,3 @@ services:
 ```sh
 java -Dconf=conf.edn -jar app.jar migrate
 ```
-

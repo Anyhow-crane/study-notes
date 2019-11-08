@@ -4,7 +4,7 @@
 
 docker仓库地址：<https://hub.docker.com/r/sonatype/nexus3/>
 
-``` sh
+```sh
 # 1: 下载镜像
 docker pull sonatype/nexus3:3.14.0
 # 2. 创建容器卷（推荐这个模式）
@@ -18,9 +18,9 @@ docker run -d -p 8081:8081 --name nexus -v /data/nexus-data:/nexus-data sonatype
 ```
 
 > 初始账号密码：admin:admin123
->
+> 
 > 推荐使用`3.14.0`，3.15有问题，无法给代理仓库配置用户密码，有些仓库需要用户密码才能下载（也可能在其他地方配置，没找到怎么配置的）
->
+> 
 > 上面运行3个端口映射：8081是默认访问端口，8082配置为docker-hosted的提交端口，8083配置为docker-group的下载端口（这个只能下载不能上传），后面使用时，最好每个端口映射一个域名。
 
 ## 仓库信息备份
@@ -53,7 +53,7 @@ docker volume create nexus-data
 docker run -d -p 8110:8081 -p 8090:8082 -p 80:8083 --name nexus3 -v nexus-data:/nexus-data --restart=always sonatype/nexus3:3.14.0
 ```
 
->配置中央仓库，或公共仓库比如阿里，把2个验证配置关掉；1.调整`Layout policy`为`Permissive`，2.关闭`Strict Content Type Validation`
+> 配置中央仓库，或公共仓库比如阿里，把2个验证配置关掉；1.调整`Layout policy`为`Permissive`，2.关闭`Strict Content Type Validation`
 
 ## Nginx反向代理开启https
 
@@ -85,17 +85,17 @@ server {
 
 开启ssl后，idea无法使用仓库，下载jar包是报错，需要信任证书（不知是不是自签证书造成的，有机会验证下），不是在系统安装的jdk里信任证书，而是在idea自带的jre里信任证书，（如果使用自己安装的maven，则在系统jdk里信任），只需要信任nginx的证书就可以了，也可以直接信任根证书。
 
-``` sh
+```sh
 /Applications/IntelliJ\ IDEA.app/Contents/jdk/Contents/Home/jre/bin/keytool -import -alias wisdragon -keystore /Applications/IntelliJ\ IDEA.app/Contents/jdk/Contents/Home/jre/lib/security/cacerts -file /Users/loong/app/cert/wisdragon.com.bundle.crt -storepass changeit
 ```
 
 > 上面为mac命令，使用idea.app里jre的keytool命令添加证书，不是直接keytool命令添加，windows同理使用应用里的jre。
->
+> 
 > -alias 为给个别名，-keystore 密钥库路径，-file 为证书位置，-storepass 密钥库密码，changeit为默认密码。
 
 ## 开启ssl后Java信任证书
 
-``` sh
+```sh
 keytool -import -alias wisdragon -keystore /Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/security/cacerts -file /Users/loong/app/cert/root.crt -storepass changeit
 ```
 
@@ -125,6 +125,16 @@ keytool -import -alias wisdragon -keystore /Library/Java/JavaVirtualMachines/jdk
 
 ### 公开pull
 
-
-
 ![image-20190307142247188](../images/image-20190307142247188.png)
+
+## 代理snapshots仓库时，不能及时获取最新包
+
+需要手动清理缓存；或者设置下面的保留缓存时间为1分钟。
+
+![image-20190605152740157](../images/image-20190605152740157.png)
+
+## 定期删除snapshots包
+
+tasks 里新建一个Maven-Delete SNAPSHOT，默认最小保留1个，保留30天内的，可以把30天修改为1。
+
+![image-20190605153200037](../images/image-20190605153200037.png)

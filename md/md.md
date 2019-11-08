@@ -11,7 +11,7 @@
 
 ## Markdown嵌套音频
 
-``` html
+```html
 <audio controls preload="none">
   <source src="horse.mp3" type="audio/mpeg">
   您的浏览器不支持 audio 元素。
@@ -20,17 +20,16 @@
 
 ## Github仓库Star
 
-``` html
+```html
 <iframe style="margin-left: 2px; margin-bottom:-4px;" frameborder="0" scrolling="0" width="110" height="20" src="https://ghbtns.com/github-btn.html?user=Anyhow-crane&repo=study-books&type=star&count=true">
 </iframe>
 ```
 
 >  src地址后面的参数意义如下：
 
-| 参数  | 必传 | 类型   | 备注       |
+| 参数    | 必传   | 类型     | 备注         |
 | ----- | ---- | ------ | ---------- |
-| user  | true | String | 用户名     |
-| repo  | true | String | 仓库名字   |
+| user  | true | String | 用户名        |
+| repo  | true | String | 仓库名字       |
 | type  | true | String | star/watch |
-| count | true | String | 显示数量   |
-
+| count | true | String | 显示数量       |

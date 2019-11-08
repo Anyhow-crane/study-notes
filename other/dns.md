@@ -1,4 +1,4 @@
-# ip查询网站 
+# ip查询网站
 
 https://www.ipaddress.com，查询ip相关信息，以及有哪些子域名
 
@@ -6,11 +6,9 @@ https://www.ipaddress.com，查询ip相关信息，以及有哪些子域名
 
 https://tool.chinaz.com/dns/，查询域名对应的dns，以及可以看到哪个最快，TTL值越小越快。
 
-
-
 ## GitHub dns
 
-``` 
+```
 # github
 13.250.177.223 github.com
 13.229.188.59 gist.github.com
@@ -30,6 +28,4 @@ https://tool.chinaz.com/dns/，查询域名对应的dns，以及可以看到哪�
 104.24.120.142 clojuredocs.org
 
 121.10.143.92 tool.chinaz.com
-
 ```
-

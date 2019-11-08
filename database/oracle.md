@@ -43,7 +43,7 @@ docker run -d --name oracle -p 1521:1521 -v oracle-data:/u01/app/oracle/oradata 
 
 > 默认密码为wiseloong。
 
-``` 
+```
 docker run --link oracle --rm pfs.wiseloong.com/wise/oracle:11-xe sqlplus system/wiseloong@//oracle:1521/XE
 ```
 
@@ -56,3 +56,16 @@ docker run --rm -ti --link oracle -v $(pwd):/dmp --shm-size=1g pfs.wiseloong.com
 docker run --rm -ti --link oracle -v $(pwd):/dmp --shm-size=1g pfs.wiseloong.com/wise/oracle:11-xe imp test/test@oracle/xe file=/dmp/1.dmp ignore=y full=y
 ```
 
+## 新建用户
+
+```sql
+-- 新增用户
+create user loong
+identified by loong
+default tablespace USERS
+temporary tablespace TEMP;
+-- 给管理员权限
+grant dba to loong;
+-- 删除用户
+drop user loong cascade;
+```

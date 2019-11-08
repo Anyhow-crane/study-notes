@@ -1,4 +1,4 @@
-#  前端打包
+# 前端打包
 
 ```dockerfile
 FROM nginx:1.14-alpine
@@ -14,8 +14,6 @@ COPY resources/public /app
 
 VOLUME /app/log
 ```
-
-
 
 # 后端打包
 
@@ -72,7 +70,6 @@ services:
       - "8888:80"
     volumes:
       - /data/wise/hrms/logs/web:/app/log
-
 ```
 
 ```yaml
@@ -114,7 +111,6 @@ services:
       - "8888:80"
     volumes:
       - /data/wise/hrms/logs/web:/app/log
-
 ```
 
 ```sh
@@ -124,9 +120,8 @@ curl -fsSL https://github.com/Anyhow-crane/docker-ops/blob/master/wise-init-dock
 curl -fsSL https://github.com/Anyhow-crane/docker-ops/blob/master/wise-init-docker.sh?raw=true | bash -s -- -u /home 3000 3306 8888
 ```
 
-``` dockerfile
+```dockerfile
 FROM openjdk:8-jre-alpine
 MAINTAINER feilong.li@wisdragon.com
 ENV TZ Asia/Shanghai
 ```
-

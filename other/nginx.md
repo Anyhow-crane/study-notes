@@ -1,6 +1,6 @@
 # 安装
 
-``` sh
+```sh
 # 1 切换root账号
 su -
 # 2 添加nginx的yum源文件

@@ -18,3 +18,12 @@
         (ok {:id "asd"})))))
 ```
 
+```
+#_(context "/e" []
+          (resource
+            {:get
+             {:handler (fn [{session :session}]
+                         (assoc (ok {:message session}) :session (vary-meta session assoc :recreate true))
+
+                         )}}))
+```

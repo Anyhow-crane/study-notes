@@ -2,7 +2,7 @@
 
 ## [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)（命令自动补全）
 
-``` sh
+```sh
 # Oh My Zsh-安装方式
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 # 修改 ~/.zshrc，添加插件
@@ -23,12 +23,12 @@ pip3 show powerline-status
 ```
 
 > 我觉得没必要安装这个，安装下面的字体就可以了。其他的主题都是需要字体，感觉和这个没关系吧。
->
+> 
 > 上面配置powerline.zsh后还有错误，找不到powerline-config，算了不安装这个了，就当了解下pip3和pip吧。
 
 ## [Powerline Fonts](https://github.com/powerline/fonts) (字体)
 
-``` sh
+```sh
 # clone
 git clone https://github.com/powerline/fonts.git --depth=1
 # install
@@ -43,7 +43,7 @@ rm -rf fonts
 
 ## [Spaceship Prompt](https://github.com/denysdovhan/spaceship-prompt)（主题）
 
-``` sh
+```sh
 # Oh My Zsh 安装方式
 git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
 # 添加链接
@@ -56,8 +56,6 @@ ZSH_THEME="spaceship"
 
 > 下载字体文件，解压，打开ttf文件夹，全选所有文件，右键选择使用字体册打开，然后点击安装
 
-
-
 # svn使用
 
 ## 设置全局忽略文件夹或文件
@@ -67,12 +65,6 @@ ZSH_THEME="spaceship"
 ```
 global-ignores = target *.iml .DS_Store .idea .svn log *.log .nrepl-port
 ```
-
-
-
-
-
-
 
 # 快捷复制文件目录
 
@@ -113,7 +105,23 @@ global-ignores = target *.iml .DS_Store .idea .svn log *.log .nrepl-port
 5. IDE Features Trainer：idea使用介绍
 6. LiveEdit：自动更新页面显示
 7. NodeJS：
+8. Save Actions 自动在保存时格式化代码
+
+![image-20190628141500826](../images/image-20190628141500826.png)
+
+```
+## 上面图里的2个配置使用这个
+.*\.min.*\.css
+.*\.min.*\.js
+```
 
 ## 使用系统默认软件打开文件
 
 比如我想使用系统安装的Typora打开.md文件，先在Editor -> File Types找到Markdown 删除*.md，再右键.md文件，选择Associate with File Type，再勾选Open matching files in associated application。
+
+# 开启hidpi
+
+1. 重启mac ，按command+R，再进入终端，输入csrutil disable，关闭SIP。
+2. 安装软件*SwitchResX*，选择为电脑上所有用户安装，选择需要修改的显示器，进入Custom Resolutions，点击下面的添加，选择Scaled resolution，在输入Scale to，填写分辨率的2倍，比如`1920*1080`分辨率则填写`3840*2160`，点击ok，再点击右下角Install安装，安装完看status是否安装，没有安装可以尝试重新安装SwitchResX试试。
+3. 再进入Current Resolutions，选择安装后的分辨率，选择带HIPDPI的。
+4. 重启mac ，按command+R，再进入终端，输入csrutil enable，开启SIP。

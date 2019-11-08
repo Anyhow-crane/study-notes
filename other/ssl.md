@@ -16,7 +16,7 @@
 - gen.cert.sh 可以设置为`/C=CN/ST=Anhui/L=Hefei/O=Wisdragon/OU=$1/CN=*.$1`，$1为执行命令后的*.wisdragon.com泛域名。
 - gen.root.sh 可以设置为`/C=CN/ST=Anhui/L=Hefei/O=Wisdragon/OU=www.wisdragon.com/CN=Wisdragon ROOT CA`。
 
-``` sh
+```sh
 ./gen.cert.sh *.wisdragon.com
 ```
 

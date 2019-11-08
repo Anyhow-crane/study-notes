@@ -1,8 +1,6 @@
-
-
 使用atom，需要在它变化时，变化 需要在外层加(fn []) 
 
-``` clojure
+```clojure
 (defn yyy []
     (fn []
         (let [abc (:handler @!location)]
@@ -11,14 +9,14 @@
 
 不能是
 
-``` clojure
+```clojure
 (defn yyy []
     (let [abc (:handler @!location)]
         (fn []
             [:div [abc]])))
 ```
 
-``` clojure
+```clojure
  (:import [goog.net XhrIo EventType WebSocket]
            [goog.net.xpc CfgFields CrossPageChannel]
            [goog Uri])
@@ -75,6 +73,3 @@
         </plugins>
     </build>
 ```
-
-
-
