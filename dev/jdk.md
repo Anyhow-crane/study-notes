@@ -27,3 +27,20 @@ https://github.com/alibaba/dragonwell8
 阿里
 
 http://mirrors.aliyun.com/repo/
+
+## SapMachine()
+
+https://github.com/SAP/SapMachine
+
+
+
+```bash
+sudo apt-get install openjdk-8-jre
+sudo apt-get install openjdk-7-jre
+sudo apt-get install openjdk-6-jre
+
+su -c "yum install java-1.8.0-openjdk"
+su -c "yum install java-1.7.0-openjdk"
+su -c "yum install java-1.6.0-openjdk"
+```
+

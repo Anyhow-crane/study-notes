@@ -1,5 +1,20 @@
 # mysql日常使用记录
 
+## 安装yum
+
+
+
+## docker安装
+
+```shell
+docker pull mysql:5
+docker volume create mysql-data
+
+docker run --restart=always -d -e TZ=Asia/Shanghai --name mysql -p 3306:3306 -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=wiseloong mysql:5 --lower_case_table_names=1 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+```
+
+> mysql8可以不用设置utf8mb4，默认就是这个。
+
 ## 创建用户和数据库
 
 ```sql

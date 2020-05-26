@@ -49,7 +49,9 @@ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 # Step 3: 更新并安装 Docker-CE
 sudo yum makecache fast
-sudo yum -y install docker-ce
+sudo yum -y install docker-ce docker-ce-cli containerd.io
+# 设置随系统启动
+sudo systemctl enable docker
 # Step 4: 开启Docker服务
 sudo systemctl start docker
 
@@ -80,8 +82,6 @@ sudo systemctl start docker
 sudo usermod -aG docker your-user
 sudo systemctl restart docker
 # 执行完该命令之后，需将该用户退出重新登录
-# 2: 设置随系统启动
-sudo systemctl enable docker
 ```
 
 ## 升级
@@ -118,8 +118,7 @@ cat <<EOF > /etc/docker/daemon.json
 {
   "data-root": "/data/docker",
   "selinux-enabled": false,
-  "registry-mirrors": ["https://pfs.wiseloong.com"]
-  "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"] # 中科大
+  "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"]
 }
 EOF
 ```
@@ -129,9 +128,19 @@ sudo bash -c 'cat <<EOF > /etc/docker/daemon.json
 {
   "data-root": "/data/docker",
   "selinux-enabled": false,
-  "registry-mirrors": ["https://pfs.wiseloong.com"]
+  "registry-mirrors": ["https://s36hsj1h.mirror.aliyuncs.com"]
 }
 EOF'
+# 
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "data-root": "/data/docker",
+  "selinux-enabled": false,
+  "registry-mirrors": ["https://s36hsj1h.mirror.aliyuncs.com", "https://registry.docker-cn.com"]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 ```
 
 ```sh
@@ -141,6 +150,8 @@ docker run --rm 镜像
 docker rm -v 容器
 # 提交（-p 在commit时，将容器暂停。）
 docker commit -p -a "feilong.li@wisdragon.com" -m "说明" 容器 新镜像名
+# 删除所有已经停止的容器
+docker rm $(docker ps -a -q)
 ```
 
 ```dockerfile
@@ -352,8 +363,12 @@ sudo chmod +x /usr/local/bin/docker-compose
 ## 使用
 
 ```sh
-# 后台启动
+# 后台启动，容器修改后再使用这个命令会重建容器
 docker-compose up -d
+# 强制重建容器
+docker-compose up -d --force-recreate
+# 停止所有容器，并删除容器
+docker-compose down
 ```
 
 ## 数据卷

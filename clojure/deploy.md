@@ -74,7 +74,7 @@
 
 ```bash
 # 安装gpg（先安装Homebrew）
-brew install gnupg2
+brew install gnupg # 为gnupg2，brew install gpg1 为安装gnupg1
 # 生成密钥-默认设置-有期限
 gpg --generate-key
 # 生成密钥-完整功能的密钥对生成，选择 1-2048-0-y-loong-582538746@qq.com- 。（推荐这个，可以设置无限期,创建时需要输入密码，可以不输入直接回车键，省去以后解密需要输入密码）

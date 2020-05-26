@@ -1,3 +1,9 @@
+# 安装Command Line Tools (CLT) for Xcode
+
+```
+xcode-select --install
+```
+
 # zsh
 
 ## [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)（命令自动补全）
